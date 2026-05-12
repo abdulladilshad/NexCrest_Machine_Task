@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import Loader from "../components/Loader";
 
 const API = "http://localhost:5000/api/products";
@@ -7,10 +8,13 @@ const API = "http://localhost:5000/api/products";
 function ProductDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [adding, setAdding] = useState(false);
+  const [addedMsg, setAddedMsg] = useState("");
 
   useEffect(() => {
     fetchProduct();
@@ -34,6 +38,22 @@ function ProductDetailPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddToCart = async () => {
+    setAdding(true);
+    setAddedMsg("");
+
+    const result = await addToCart(product._id);
+
+    if (result.success) {
+      setAddedMsg("Added to cart ✓");
+      setTimeout(() => setAddedMsg(""), 2000);
+    } else {
+      setAddedMsg(result.message || "Failed to add");
+    }
+
+    setAdding(false);
   };
 
   if (loading) {
@@ -77,6 +97,20 @@ function ProductDetailPage() {
           <div className="detail-section">
             <h2 className="detail-section-title">Description</h2>
             <p className="detail-description">{product.description}</p>
+          </div>
+
+          <div className="detail-divider" />
+
+          {/* Add to Cart */}
+          <div className="detail-cart-row">
+            <button
+              className="add-to-cart-btn"
+              onClick={handleAddToCart}
+              disabled={adding}
+            >
+              {adding ? "Adding..." : "🛒 Add to Cart"}
+            </button>
+            {addedMsg && <span className="added-msg">{addedMsg}</span>}
           </div>
 
           <div className="detail-divider" />

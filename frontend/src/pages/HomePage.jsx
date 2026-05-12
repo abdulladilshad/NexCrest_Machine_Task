@@ -1,15 +1,10 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
 
 const API = "http://localhost:5000/api/products";
 
 function HomePage() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -49,23 +44,6 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      <header className="home-header">
-        <h1>Rajesh Electronics</h1>
-        <div className="header-right">
-          <span className="welcome-text">
-            Hi, {user?.name} {user?.role === "admin" && "(Admin)"}
-          </span>
-          {user?.role === "admin" && (
-            <button onClick={() => navigate("/admin")} className="nav-btn">
-              Admin Panel
-            </button>
-          )}
-          <button onClick={logout} className="logout-btn">
-            Logout
-          </button>
-        </div>
-      </header>
-
       <main className="home-content">
         {/* Search bar */}
         <div className="search-bar">
