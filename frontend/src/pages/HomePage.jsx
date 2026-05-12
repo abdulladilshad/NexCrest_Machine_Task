@@ -1,7 +1,9 @@
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function HomePage() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="home-page">
@@ -11,6 +13,11 @@ function HomePage() {
           <span className="welcome-text">
             Hi, {user?.name} {user?.role === "admin" && "(Admin)"}
           </span>
+          {user?.role === "admin" && (
+            <button onClick={() => navigate("/admin")} className="nav-btn">
+              Admin Panel
+            </button>
+          )}
           <button onClick={logout} className="logout-btn">
             Logout
           </button>

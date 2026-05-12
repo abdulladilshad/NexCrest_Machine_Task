@@ -1,8 +1,12 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AddProduct from "./pages/admin/AddProduct";
+import EditProduct from "./pages/admin/EditProduct";
 import "./App.css";
 
 // Redirect logged-in users away from login page
@@ -37,6 +41,32 @@ function App() {
               <ProtectedRoute>
                 <HomePage />
               </ProtectedRoute>
+            }
+          />
+
+          {/* Admin routes — admin only */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/add"
+            element={
+              <AdminRoute>
+                <AddProduct />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/edit/:id"
+            element={
+              <AdminRoute>
+                <EditProduct />
+              </AdminRoute>
             }
           />
 
