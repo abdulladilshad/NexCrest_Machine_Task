@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useAuth } from "./AuthContext";
+import { useToast } from "./ToastContext";
 
 const CartContext = createContext(null);
 
@@ -7,6 +8,7 @@ const API = "http://localhost:5000/api/cart";
 
 export function CartProvider({ children }) {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -48,12 +50,15 @@ export function CartProvider({ children }) {
       if (res.ok) {
         const data = await res.json();
         setItems(data.items);
+        showToast("Added to cart");
         return { success: true };
       }
 
       const data = await res.json();
+      showToast(data.message || "Failed to add", "error");
       return { success: false, message: data.message };
     } catch (error) {
+      showToast("Failed to add to cart", "error");
       return { success: false, message: "Failed to add to cart" };
     }
   };
@@ -71,9 +76,10 @@ export function CartProvider({ children }) {
       if (res.ok) {
         const data = await res.json();
         setItems(data.items);
+        showToast("Cart updated");
       }
     } catch (error) {
-      console.error("Failed to update quantity:", error);
+      showToast("Failed to update quantity", "error");
     }
   };
 
@@ -88,9 +94,10 @@ export function CartProvider({ children }) {
       if (res.ok) {
         const data = await res.json();
         setItems(data.items);
+        showToast("Removed from cart");
       }
     } catch (error) {
-      console.error("Failed to remove from cart:", error);
+      showToast("Failed to remove item", "error");
     }
   };
 

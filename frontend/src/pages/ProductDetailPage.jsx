@@ -14,7 +14,6 @@ function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [adding, setAdding] = useState(false);
-  const [addedMsg, setAddedMsg] = useState("");
 
   useEffect(() => {
     fetchProduct();
@@ -42,17 +41,7 @@ function ProductDetailPage() {
 
   const handleAddToCart = async () => {
     setAdding(true);
-    setAddedMsg("");
-
-    const result = await addToCart(product._id);
-
-    if (result.success) {
-      setAddedMsg("Added to cart ✓");
-      setTimeout(() => setAddedMsg(""), 2000);
-    } else {
-      setAddedMsg(result.message || "Failed to add");
-    }
-
+    await addToCart(product._id);
     setAdding(false);
   };
 
@@ -110,7 +99,6 @@ function ProductDetailPage() {
             >
               {adding ? "Adding..." : "🛒 Add to Cart"}
             </button>
-            {addedMsg && <span className="added-msg">{addedMsg}</span>}
           </div>
 
           <div className="detail-divider" />

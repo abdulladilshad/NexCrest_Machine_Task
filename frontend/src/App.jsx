@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { ToastProvider } from "./context/ToastContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import Navbar from "./components/Navbar";
@@ -38,10 +39,11 @@ function UserOnlyRoute({ children }) {
 function App() {
   return (
     <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
-          {/* Shared navbar — shows on all pages when logged in */}
-          <Navbar />
+      <ToastProvider>
+        <AuthProvider>
+          <CartProvider>
+            {/* Shared navbar — shows on all pages when logged in */}
+            <Navbar />
 
           <Routes>
             {/* Login — only accessible when not logged in */}
@@ -113,8 +115,9 @@ function App() {
             {/* Catch-all — redirect to home */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </CartProvider>
-      </AuthProvider>
+          </CartProvider>
+        </AuthProvider>
+      </ToastProvider>
     </BrowserRouter>
   );
 }
