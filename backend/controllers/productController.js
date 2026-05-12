@@ -1,9 +1,20 @@
 const Product = require("../models/Product");
 
 // GET /api/products — get all products (any logged-in user)
+// Supports ?search=keyword to filter by name or description
 const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    const { search } = req.query;
+    let filter = {};
+
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), "i");
+      filter = {
+        $or: [{ name: regex }, { description: regex }],
+      };
+    }
+
+    const products = await Product.find(filter).sort({ createdAt: -1 });
     res.json({ products });
   } catch (error) {
     console.error("Get products error:", error.message);
