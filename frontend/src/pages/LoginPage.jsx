@@ -24,8 +24,12 @@ function LoginPage() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      navigate("/");
+      const data = await login(email, password);
+      if (data.user?.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch (err) {
       setError(err.message);
     } finally {

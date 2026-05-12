@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const API = "http://localhost:5000/api/products";
 
 function AdminDashboard() {
-  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,19 +52,6 @@ function AdminDashboard() {
 
   return (
     <div className="admin-page">
-      <header className="home-header">
-        <h1>Rajesh Electronics</h1>
-        <div className="header-right">
-          <span className="welcome-text">Hi, {user?.name} (Admin)</span>
-          <button onClick={() => navigate("/")} className="nav-btn">
-            Shop View
-          </button>
-          <button onClick={logout} className="logout-btn">
-            Logout
-          </button>
-        </div>
-      </header>
-
       <main className="admin-content">
         <div className="admin-top-bar">
           <h2>Manage Products</h2>
@@ -100,20 +85,22 @@ function AdminDashboard() {
                     <td className="td-price">₹{product.price}</td>
                     <td className="td-desc">{product.description}</td>
                     <td className="td-actions">
-                      <button
-                        className="edit-btn"
-                        onClick={() =>
-                          navigate(`/admin/edit/${product._id}`)
-                        }
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="delete-btn"
-                        onClick={() => setDeleteId(product._id)}
-                      >
-                        Delete
-                      </button>
+                      <div className="actions-group">
+                        <button
+                          className="edit-btn"
+                          onClick={() =>
+                            navigate(`/admin/edit/${product._id}`)
+                          }
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="delete-btn"
+                          onClick={() => setDeleteId(product._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

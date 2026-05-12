@@ -492,6 +492,9 @@ body {
 
 .td-actions {
   white-space: nowrap;
+}
+
+.actions-group {
   display: flex;
   gap: 8px;
 }

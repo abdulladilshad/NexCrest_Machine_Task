@@ -7,6 +7,7 @@ function Navbar() {
   const { cartCount } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
+  const isAdmin = user?.role === "admin";
 
   if (!user) return null;
 
@@ -22,21 +23,16 @@ function Navbar() {
 
       <div className="header-right">
         <span className="welcome-text">
-          Hi, {user.name} {user.role === "admin" && "(Admin)"}
+          Hi, {user.name} {isAdmin && "(Admin)"}
         </span>
 
-        {/* Cart button */}
-        <button
-          className={`cart-btn ${location.pathname === "/cart" ? "cart-btn-active" : ""}`}
-          onClick={() => navigate("/cart")}
-        >
-          🛒 Cart
-          {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-        </button>
-
-        {user.role === "admin" && (
-          <button onClick={() => navigate("/admin")} className="nav-btn">
-            Admin Panel
+        {!isAdmin && (
+          <button
+            className={`cart-btn ${location.pathname === "/cart" ? "cart-btn-active" : ""}`}
+            onClick={() => navigate("/cart")}
+          >
+            🛒 Cart
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
           </button>
         )}
 

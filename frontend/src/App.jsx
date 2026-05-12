@@ -18,7 +18,19 @@ function GuestRoute({ children }) {
   const { user, loading } = useAuth();
 
   if (loading) return <div className="loading-screen">Loading...</div>;
-  if (user) return <Navigate to="/" replace />;
+  if (user) {
+    return <Navigate to={user.role === "admin" ? "/admin" : "/"} replace />;
+  }
+
+  return children;
+}
+
+function UserOnlyRoute({ children }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return <div className="loading-screen">Loading...</div>;
+  if (!user) return <Navigate to="/login" replace />;
+  if (user.role === "admin") return <Navigate to="/admin" replace />;
 
   return children;
 }
@@ -46,9 +58,9 @@ function App() {
             <Route
               path="/"
               element={
-                <ProtectedRoute>
+                <UserOnlyRoute>
                   <HomePage />
-                </ProtectedRoute>
+                </UserOnlyRoute>
               }
             />
 
@@ -56,9 +68,9 @@ function App() {
             <Route
               path="/product/:id"
               element={
-                <ProtectedRoute>
+                <UserOnlyRoute>
                   <ProductDetailPage />
-                </ProtectedRoute>
+                </UserOnlyRoute>
               }
             />
 
